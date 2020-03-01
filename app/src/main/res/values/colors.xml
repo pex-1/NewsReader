@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#fff</color>
+    <color name="colorAccent">#c02c2c</color>
+
+    <color name="divider">#d6d6d6</color>
+    <color name="subtitle_text">#c2c2c2</color>
+    <color name="white_transparent">#ccffffff</color>
+
+    <color name="button_disabled">#ffccd5</color>
+    <color name="dark_red">#61d08282</color>
+    <color name="title_text">#2e2e2e</color>
+
+    <color name="main_color">#ff758c</color>
+    <color name="white">#fff</color>
+    <color name="year_text">#a0a0a0</color>
+    <color name="season">#a0a0a3</color>
+
+    <color name="highlighted_item">#a6d8d8d8</color>
+    <color name="counter_color">#de000000</color>
+
+    <color name="details_bar_color">#132e20</color>
+</resources>

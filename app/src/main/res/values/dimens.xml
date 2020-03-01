@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--General-->
+    <dimen name="spacing_1x">4dp</dimen>
+    <dimen name="spacing_2x">8dp</dimen>
+    <dimen name="spacing_3x">16dp</dimen>
+    <dimen name="spacing_4x">24dp</dimen>
+    <dimen name="spacing_5x">32dp</dimen>
+    <dimen name="spacing_6x">40dp</dimen>
+
+    <!-- recycler image size -->
+    <dimen name="image_size">1200dp</dimen>
+</resources>
