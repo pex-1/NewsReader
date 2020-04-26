@@ -8,7 +8,7 @@ import practice.newsreader.ui.MainActivity
 @Module
 abstract class ActivityBuildersModule {
 
-    @ContributesAndroidInjector(modules = [MainFragmentBuildersModule::class])  //this fragment can only be used within the scope of the main activity subcomponent
-    abstract fun contributeMainActivity(): MainActivity?
+    @ContributesAndroidInjector(modules = [MainFragmentBuildersModule::class])
+    abstract fun contributeMainActivity(): MainActivity
 
 }

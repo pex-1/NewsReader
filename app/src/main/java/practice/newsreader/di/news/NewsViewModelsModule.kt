@@ -15,5 +15,4 @@ abstract class NewsViewModelsModule {
     @ViewModelKey(NewsViewModel::class)
     abstract fun bindNewsViewModel(viewModel: NewsViewModel): ViewModel
 
-    //Add more ViewModels here
 }

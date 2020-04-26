@@ -2,4 +2,23 @@
     <string name="app_name">News Reader</string>
     <string name="toolbar_news_title">News Reader</string>
     <string name="item_news_image">Article image</string>
+
+    <string-array name="endpoints">
+        <item>top-headlines?country=us</item>
+        <item>everything?domains=wsj.com,nytimes.com</item>
+        <item>top-headlines?sources=bbc-news</item>
+        <item>top-headlines?country=de&amp;category=business</item>
+        <item>HUF</item>
+        <item>JPY</item>
+        <item>NOK</item>
+        <item>SEK</item>
+        <item>CHF</item>
+        <item>GBP</item>
+        <item>USD</item>
+        <item>BAM</item>
+        <item>EUR</item>
+        <item>PLN</item>
+    </string-array>
+    <string name="splash_screen_image">Splash screen image</string>
+    <string name="reset_search_icon">reset search icon</string>
 </resources>

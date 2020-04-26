@@ -5,7 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.squareup.picasso.Picasso
+import androidx.core.content.ContextCompat
+import com.bumptech.glide.RequestManager
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_details.*
 import practice.newsreader.R
@@ -15,7 +16,8 @@ import javax.inject.Inject
 class DetailsFragment : DaggerFragment() {
 
     @Inject
-    lateinit var picasso: Picasso
+
+    lateinit var glide: RequestManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,6 +29,9 @@ class DetailsFragment : DaggerFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //TODO: context!!
+        view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.fragmentBackground))
 
         setToolbar()
         setUi()
@@ -41,11 +46,11 @@ class DetailsFragment : DaggerFragment() {
             detailsSourceAndTimeTextView.text = "${article.source.name}  \u2022  ${DateUtils.getTimePassed(article.publishedAt)} ago"
             detailsContentTextView.text = article.content
 
-            picasso.load(article.urlToImage)
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.placeholder)
+            glide.load(article.urlToImage)
                 .centerCrop()
-                .fit()
+                .fitCenter()
+                .error(R.drawable.placeholder)
+                .placeholder(R.drawable.placeholder)
                 .into(detailsImageView)
 
         }
