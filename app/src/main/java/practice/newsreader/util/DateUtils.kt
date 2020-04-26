@@ -16,7 +16,7 @@ object DateUtils {
     }
 
 
-    fun getDate(publishedAt: String): Date? {
+    fun getDate(publishedAt: String?): Date? {
         try {
             val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
             formatter.timeZone = TimeZone.getTimeZone("GMT")
@@ -28,11 +28,11 @@ object DateUtils {
     }
 
 
-    fun getTimePassed(publishedAt: String): String? {
+    fun getTimePassed(publishedAt: String?): String? {
 
-        val articleDate = getDate(publishedAt)
+        val articleDate = getDate(publishedAt) ?: return "0h 0m"
         val current = Date()
-        val milliseconds = current.time - articleDate!!.time
+        val milliseconds = current.time - articleDate.time
         val seconds = milliseconds / 1000
         val minutes = seconds / 60
 

@@ -1,9 +1,15 @@
 package practice.newsreader.di.news
 
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import dagger.Module
 import dagger.Provides
+import io.reactivex.Completable
+import io.reactivex.disposables.CompositeDisposable
+import practice.newsreader.api.ApiService
 import practice.newsreader.ui.fragments.news.NewsAdapter
+import practice.newsreader.ui.fragments.news.NewsDataSource
+import practice.newsreader.ui.fragments.news.NewsDataSourceFactory
 import practice.newsreader.ui.fragments.news.NewsFragment
 
 @Module
@@ -11,14 +17,53 @@ class NewsModule {
 
     @NewsScope
     @Provides
-    fun provideAdapter(clickListener: NewsAdapter.OnArticleClicked, picasso: Picasso):NewsAdapter{
-        return NewsAdapter(clickListener, picasso)
+    fun provideAdapter(footerClickListener: NewsAdapter.OnFooterClicked, clickListener: NewsAdapter.OnArticleClicked, glide: RequestManager):NewsAdapter{
+        return NewsAdapter(footerClickListener, clickListener, glide)
     }
 
     @NewsScope
     @Provides
-    fun provideOnClickListener(newsFragment: NewsFragment):NewsAdapter.OnArticleClicked{
+    fun provideOnFooterClickListener(newsFragment: NewsFragment): NewsAdapter.OnFooterClicked{
         return newsFragment
     }
+
+    @NewsScope
+    @Provides
+
+    fun provideGlide(newsFragment: NewsFragment):RequestManager{
+        return Glide.with(newsFragment)
+    }
+
+    @NewsScope
+    @Provides
+    fun provideOnClickListener(newsFragment: NewsFragment): NewsAdapter.OnArticleClicked{
+        return newsFragment
+    }
+
+
+    @Provides
+    fun provideNewsDataSource(apiService: ApiService, compositeDisposable: CompositeDisposable):NewsDataSource{
+        return NewsDataSource(apiService,compositeDisposable)
+    }
+
+
+    @Provides
+    fun provideNewsDataSourceFactory(apiService: ApiService, compositeDisposable: CompositeDisposable):NewsDataSourceFactory{
+        return NewsDataSourceFactory(apiService, compositeDisposable)
+    }
+
+    @NewsScope
+    @Provides
+    fun provideCompositeDisposable():CompositeDisposable{
+        return CompositeDisposable()
+    }
+
+    @NewsScope
+    @Provides
+    fun provideCompletable():Completable?{
+        return Completable.complete()
+    }
+
+
 
 }

@@ -9,15 +9,13 @@ import practice.newsreader.BaseApplication
 import javax.inject.Singleton
 
 @Singleton
-@Component(
-    modules = [
-        AndroidSupportInjectionModule::class,
-        NetworkModule::class,
-        AppModule::class,
-        ViewModelFactoryModule::class,
-        ActivityBuildersModule::class
-    ]
-)
+@Component(modules = [
+    AndroidSupportInjectionModule::class,
+    NetworkModule::class,
+    AppModule::class,
+    ViewModelFactoryModule::class,
+    ActivityBuildersModule::class
+])
 
 interface AppComponent : AndroidInjector<BaseApplication> {
 

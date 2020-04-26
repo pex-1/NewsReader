@@ -26,7 +26,6 @@ data class Article(
 
 ):Parcelable {
     override fun equals(other: Any?): Boolean {
-        //check if the actual class of the object is the same as the one it's being compared to
         if (javaClass != other?.javaClass) return false
         other as Article
 
