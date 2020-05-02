@@ -1,4 +1,4 @@
-package practice.newsreader.ui.news
+package practice.newsreader.ui.news.paging
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -27,7 +27,7 @@ class NewsDataSource @Inject constructor(private val apiService: ApiService, pri
     private var lastRequest = Constants.PAGE_SIZE + 1
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Article>) {
-        compositeDisposable.add(apiService.getArticles(EndpointsUtil.ENDPOINTS[EndpointsUtil.position], Constants.search, 1, params.requestedLoadSize)
+        compositeDisposable.add(apiService.getArticles(EndpointsUtil.ENDPOINTS[EndpointsUtil.position], EndpointsUtil.searchQuery[EndpointsUtil.position], 1, params.requestedLoadSize)
                 .doOnSubscribe {
                     updateState(NetworkResponse.start())
                 }
@@ -45,7 +45,7 @@ class NewsDataSource @Inject constructor(private val apiService: ApiService, pri
 
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Article>) {
         if (articleSize < Constants.INITIAL_PAGE_SIZE || lastRequest < Constants.PAGE_SIZE) return
-        compositeDisposable.add(apiService.getArticles(EndpointsUtil.ENDPOINTS[EndpointsUtil.position], Constants.search, params.key, params.requestedLoadSize)
+        compositeDisposable.add(apiService.getArticles(EndpointsUtil.ENDPOINTS[EndpointsUtil.position], EndpointsUtil.searchQuery[EndpointsUtil.position], params.key, params.requestedLoadSize)
                 .doOnSubscribe {
                     updateState(NetworkResponse.start())
                 }

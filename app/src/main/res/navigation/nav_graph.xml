@@ -3,24 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/screen1"
-    tools:ignore="UnusedNavigation">
+    app:startDestination="@id/screen1">
 
     <fragment
         android:id="@+id/screen1"
-        android:name="practice.newsreader.ui.fragments.news.NewsFragment"
+        android:name="practice.newsreader.ui.news.PagerFragment"
         android:label="Screen1" >
         <action
-            android:id="@+id/action_details_screen"
-            app:destination="@id/screen2" />
+            android:id="@+id/action_pager_to_details"
+            app:destination="@id/detailsActivity" />
     </fragment>
-    <fragment
-        android:id="@+id/screen2"
-        android:name="practice.newsreader.ui.fragments.details.DetailsFragment"
-        android:label="Screen2" >
+    <activity
+        android:id="@+id/detailsActivity"
+        android:name="practice.newsreader.ui.details.DetailsActivity"
+        android:label="activity_details"
+        tools:layout="@layout/activity_details">
         <argument
             android:name="article"
             app:argType="practice.newsreader.data.model.Article"
             app:nullable="true" />
-    </fragment>
+    </activity>
 </navigation>

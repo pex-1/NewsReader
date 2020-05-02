@@ -1,4 +1,4 @@
-package practice.newsreader.ui.fragments.news
+package practice.newsreader.ui.news
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
@@ -9,10 +9,11 @@ import io.reactivex.disposables.CompositeDisposable
 import practice.newsreader.api.ApiService
 import practice.newsreader.data.model.Article
 import practice.newsreader.data.model.NetworkResponse
+import practice.newsreader.ui.news.paging.NewsDataSource
+import practice.newsreader.ui.news.paging.NewsDataSourceFactory
 import javax.inject.Inject
 
 class NewsViewModel @Inject constructor(private val apiService: ApiService, private val config: PagedList.Config) : ViewModel() {
-
 
     private val compositeDisposable = CompositeDisposable()
     private var newsDataSourceFactory: NewsDataSourceFactory
@@ -23,7 +24,7 @@ class NewsViewModel @Inject constructor(private val apiService: ApiService, priv
 
     fun getResponse(): LiveData<NetworkResponse> = Transformations.switchMap<NewsDataSource, NetworkResponse>(newsDataSourceFactory.newsDataSourceLiveData, NewsDataSource::getResponse)
 
-    fun refresh(){
+    fun refresh() {
         newsDataSourceFactory.newsDataSourceLiveData.value?.invalidate()
     }
 

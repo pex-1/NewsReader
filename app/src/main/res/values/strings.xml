@@ -3,21 +3,25 @@
     <string name="toolbar_news_title">News Reader</string>
     <string name="item_news_image">Article image</string>
 
+    <string name="cat_tab_item_label">Tab %d</string>
+
+    <string name="first_fragment">Top headlines</string>
+    <string name="second_fragment">NY Times</string>
+    <string name="third_fragment">BBC News</string>
+
+    <integer name="num_tabs">4</integer>
+
+    <string-array name="fragment_titles">
+        <item>@string/first_fragment</item>
+        <item>@string/second_fragment</item>
+        <item>@string/third_fragment</item>
+    </string-array>
+
     <string-array name="endpoints">
         <item>top-headlines?country=us</item>
         <item>everything?domains=wsj.com,nytimes.com</item>
         <item>top-headlines?sources=bbc-news</item>
         <item>top-headlines?country=de&amp;category=business</item>
-        <item>HUF</item>
-        <item>JPY</item>
-        <item>NOK</item>
-        <item>SEK</item>
-        <item>CHF</item>
-        <item>GBP</item>
-        <item>USD</item>
-        <item>BAM</item>
-        <item>EUR</item>
-        <item>PLN</item>
     </string-array>
     <string name="splash_screen_image">Splash screen image</string>
     <string name="reset_search_icon">reset search icon</string>

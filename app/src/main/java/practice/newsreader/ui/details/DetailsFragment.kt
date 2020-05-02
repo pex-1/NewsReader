@@ -1,4 +1,4 @@
-package practice.newsreader.ui.fragments.details
+package practice.newsreader.ui.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,28 +16,24 @@ import javax.inject.Inject
 class DetailsFragment : DaggerFragment() {
 
     @Inject
-
     lateinit var glide: RequestManager
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_details, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO: context!!
-        view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.fragmentBackground))
-
+/*
         setToolbar()
         setUi()
+
+ */
     }
 
 
+    /*
     private fun setUi() {
         arguments?.let {
             val article = DetailsFragmentArgs.fromBundle(it).article!!
@@ -47,11 +43,11 @@ class DetailsFragment : DaggerFragment() {
             detailsContentTextView.text = article.content
 
             glide.load(article.urlToImage)
-                .centerCrop()
-                .fitCenter()
-                .error(R.drawable.placeholder)
-                .placeholder(R.drawable.placeholder)
-                .into(detailsImageView)
+                    .centerCrop()
+                    .fitCenter()
+                    .error(R.drawable.placeholder)
+                    .placeholder(R.drawable.placeholder)
+                    .into(detailsImageView)
 
         }
     }
@@ -63,5 +59,7 @@ class DetailsFragment : DaggerFragment() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
     }
+
+     */
 
 }

@@ -23,7 +23,8 @@
     </style>
 
     <!-- ToolBar -->
-    <style name="ToolbarTheme" parent="Theme.AppCompat.Light">
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorPrimary">@color/white</item>
         <item name="android:textColorPrimary">#000</item>
         <item name="android:textColorSecondary">@color/dark_red</item>
         <item name="actionMenuTextColor">@color/colorAccent</item>
