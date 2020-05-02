@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.Provides
 import practice.newsreader.R
 import practice.newsreader.data.model.NewsResponse
+import practice.newsreader.data.model.SearchQuery
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -18,7 +19,6 @@ class AppModule {
     fun provideAppDrawable(application: Application): Drawable? {
         return ContextCompat.getDrawable(application, R.drawable.placeholder)
     }
-
 
     @Singleton
     @Provides

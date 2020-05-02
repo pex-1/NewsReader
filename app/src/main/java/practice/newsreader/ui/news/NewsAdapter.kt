@@ -1,4 +1,4 @@
-package practice.newsreader.ui.fragments.news
+package practice.newsreader.ui.news
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import kotlinx.android.synthetic.main.item_footer.view.*
 import kotlinx.android.synthetic.main.item_news.view.*
@@ -15,7 +14,6 @@ import practice.newsreader.data.model.Article
 import practice.newsreader.data.model.NetworkResponse
 import practice.newsreader.util.DateUtils
 import javax.inject.Inject
-import javax.inject.Named
 
 private const val DATA_VIEW_TYPE = 1
 private const val FOOTER_VIEW_TYPE = 2

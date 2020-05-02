@@ -1,14 +1,11 @@
-package practice.newsreader.ui.fragments.news
+package practice.newsreader.ui.news
 
-import android.app.SearchManager
-import android.content.Context.SEARCH_SERVICE
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContextCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -25,7 +22,7 @@ import practice.newsreader.util.*
 import javax.inject.Inject
 
 
-class NewsFragment : DaggerFragment(), NewsAdapter.OnArticleClicked, NewsAdapter.OnFooterClicked {
+class NewsFragment @Inject constructor() : DaggerFragment(), NewsAdapter.OnArticleClicked, NewsAdapter.OnFooterClicked {
 
     private var navController: NavController? = null
 
@@ -35,10 +32,25 @@ class NewsFragment : DaggerFragment(), NewsAdapter.OnArticleClicked, NewsAdapter
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
 
-    private lateinit var viewModel: NewsViewModel
+    lateinit var viewModel: NewsViewModel
 
     private var swipeLoading = false
 
+
+
+
+    companion object {
+        val TAB_NUMBER = "tab_number"
+
+        fun newInstance(tabNumber: Int): NewsFragment {
+            val fragment = NewsFragment()
+            val bundle = Bundle()
+            bundle.putInt(TAB_NUMBER, tabNumber)
+            fragment.arguments = bundle
+
+            return fragment
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_news, container, false)
@@ -47,12 +59,11 @@ class NewsFragment : DaggerFragment(), NewsAdapter.OnArticleClicked, NewsAdapter
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO: context!!
-        view.setBackgroundColor(ContextCompat.getColor(context!!, R.color.fragmentBackground))
+        navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment)
 
-        setToolbar()
-
-        navController = Navigation.findNavController(view)
+        if (arguments != null) {
+            EndpointsUtil.position = arguments!!.getInt(TAB_NUMBER)
+        }
 
         viewModel = ViewModelProvider(this, providerFactory).get(NewsViewModel::class.java)
 
@@ -60,24 +71,40 @@ class NewsFragment : DaggerFragment(), NewsAdapter.OnArticleClicked, NewsAdapter
 
         initSwipeRefresh()
 
-        setSearchLayout()
+        initSearch()
+
+        resetSearch()
 
         val itemDecoration = VerticalSpacingItemDecoration(15)
         newsRecyclerView.addItemDecoration(itemDecoration)
 
+
+
+    }
+
+    private fun resetSearch(){
         resetSearchImageView.setOnClickListener {
-            Constants.search = null
+            EndpointsUtil.searchQuery[getPosition()] = null
             searchQueryLinearLayout.hide()
             viewModel.refresh()
         }
     }
 
-    private fun setSearchLayout() {
-        if (Constants.search != null) {
-            searchQueryLinearLayout.show()
-            searchQueryTextView.text = Constants.search
+    fun setSearchQuery(query: String?) {
+        if (query != null) {
+            EndpointsUtil.searchQuery[getPosition()] = query
+            initSearch()
         }
     }
+
+    private fun initSearch(){
+        if(EndpointsUtil.searchQuery[getPosition()] != null){
+            searchQueryLinearLayout.show()
+            searchQueryTextView.text = EndpointsUtil.searchQuery[getPosition()]
+        }
+    }
+
+    private fun getPosition() = arguments?.getInt(TAB_NUMBER) ?: 0
 
     private fun hideProgress() {
         newsLoadingProgressBar.hide()
@@ -93,26 +120,28 @@ class NewsFragment : DaggerFragment(), NewsAdapter.OnArticleClicked, NewsAdapter
         newsSwipeRefreshLayout.setOnRefreshListener {
             swipeLoading = true
             viewModel.refresh()
-            //newsSwipeRefreshLayout.isRefreshing = false
         }
     }
 
     private fun subscribeObservers() {
         viewModel.getArticleList()
+                .removeObservers(viewLifecycleOwner)
+        viewModel.getArticleList()
                 .observe(viewLifecycleOwner, Observer {
                     if (it != null) {
-                        //Log.e("OBSERVER", "new list: ${it[0]}")
                         setUi(it)
                     }
                 })
 
+        viewModel.getResponse()
+                .removeObservers(viewLifecycleOwner)
         viewModel.getResponse()
                 .observe(viewLifecycleOwner, Observer {
                     if (!viewModel.listIsEmpty()) {
                         newsAdapter.setStatus(it.status ?: NetworkResponse.Status.SUCCESS)
                     }
                     when (it.status) {
-                        NetworkResponse.Status.LOADING -> Log.e("LOADING", "swipe $swipeLoading")
+                        NetworkResponse.Status.LOADING -> if (!swipeLoading) newsLoadingProgressBar.show()
                         NetworkResponse.Status.SUCCESS -> hideProgress()
 
                         NetworkResponse.Status.ERROR -> {
@@ -131,65 +160,17 @@ class NewsFragment : DaggerFragment(), NewsAdapter.OnArticleClicked, NewsAdapter
             layoutManager = LinearLayoutManager(context)
             adapter = newsAdapter
         }
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.news_menu, menu)
-
-
-        val manager = activity?.getSystemService(SEARCH_SERVICE) as SearchManager
-        val searchItem = menu.findItem(R.id.search)
-        val searchView = searchItem.actionView as SearchView
-
-        searchView.setSearchableInfo(manager.getSearchableInfo(activity?.componentName))
-
-        searchView.isFocusable = true
-        searchView.isIconified = true
-        searchView.requestFocusFromTouch()
-        searchView.onActionViewExpanded()
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                searchView.clearFocus()
-                searchView.setQuery("", false)
-                searchItem.collapseActionView()
-                Constants.search = query
-                viewModel.refresh()
-                context?.toast("looking for $query")
-                setSearchLayout()
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                return false
-            }
-        })
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-    private fun setToolbar() {
-        with((requireActivity() as AppCompatActivity)) {
-            setSupportActionBar(newsToolbar)
-            supportActionBar?.setDisplayShowTitleEnabled(false)
-        }
     }
 
 
     override fun onClick(article: Article?) {
-        val direction = NewsFragmentDirections.actionDetailsScreen(article)
+        val direction = PagerFragmentDirections.actionPagerToDetails(article)
         navController?.navigate(direction)
     }
 
     override fun onClick() {
         viewModel.retry()
     }
-
-
 
 
 }

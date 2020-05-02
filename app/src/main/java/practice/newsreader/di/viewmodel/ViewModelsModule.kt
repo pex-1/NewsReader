@@ -5,7 +5,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import practice.newsreader.di.ViewModelKey
-import practice.newsreader.ui.fragments.news.NewsViewModel
+import practice.newsreader.ui.news.NewsViewModel
 
 @Module
 abstract class NewsViewModelsModule {
