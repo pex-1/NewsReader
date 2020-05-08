@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import io.reactivex.disposables.CompositeDisposable
 import practice.newsreader.api.ApiService
+import practice.newsreader.data.database.NewsDao
 import practice.newsreader.data.model.Article
 import practice.newsreader.ui.news.paging.NewsDataSource
 import javax.inject.Inject

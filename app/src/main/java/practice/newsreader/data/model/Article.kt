@@ -2,10 +2,14 @@ package practice.newsreader.data.model
 
 
 import android.os.Parcelable
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
+@Entity(tableName = "news_table")
 data class Article(
     @SerializedName("author")
     val author: String?,
@@ -13,9 +17,11 @@ data class Article(
     val content: String?,
     @SerializedName("description")
     val description: String,
+    @PrimaryKey
     @SerializedName("publishedAt")
     val publishedAt: String,
     @SerializedName("source")
+    @Embedded
     val source: Source,
     @SerializedName("title")
     val title: String,
@@ -23,7 +29,6 @@ data class Article(
     val url: String,
     @SerializedName("urlToImage")
     val urlToImage: String?
-
 ):Parcelable {
     override fun equals(other: Any?): Boolean {
         if (javaClass != other?.javaClass) return false

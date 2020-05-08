@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -46,4 +47,10 @@ fun Activity.makeStatusBarTransparent() {
             statusBarColor = Color.TRANSPARENT
         }
     }
+}
+
+fun View.setMarginTop(marginTop: Int) {
+    val menuLayoutParams = this.layoutParams as ViewGroup.MarginLayoutParams
+    menuLayoutParams.setMargins(0, marginTop, 0, 0)
+    this.layoutParams = menuLayoutParams
 }

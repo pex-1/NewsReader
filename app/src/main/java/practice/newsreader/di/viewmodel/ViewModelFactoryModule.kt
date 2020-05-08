@@ -1,4 +1,4 @@
-package practice.newsreader.di
+package practice.newsreader.di.viewmodel
 
 import androidx.lifecycle.ViewModelProvider
 import dagger.Binds

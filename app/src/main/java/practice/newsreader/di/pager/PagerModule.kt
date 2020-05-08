@@ -2,7 +2,6 @@ package practice.newsreader.di.pager
 
 import dagger.Module
 import dagger.Provides
-import practice.newsreader.data.model.SearchQuery
 import practice.newsreader.ui.MainActivity
 import practice.newsreader.ui.news.PagerAdapter
 

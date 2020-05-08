@@ -1,5 +1,6 @@
 package practice.newsreader.ui.news
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,10 @@ class NewsAdapter @Inject constructor(private val footerClickListener: OnFooterC
         return if (viewType == DATA_VIEW_TYPE) NewsViewHolder(parent).create(parent) else ErrorViewHolder(parent).create(parent)
     }
 
-    override fun getItemCount(): Int = super.getItemCount() + if (hasFooter()) 1 else 0
+    override fun getItemCount(): Int {
+        return super.getItemCount() + if (hasFooter()) 1 else 0
+    }
+
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == DATA_VIEW_TYPE) (holder as NewsViewHolder).bind(getItem(position))
@@ -37,7 +41,7 @@ class NewsAdapter @Inject constructor(private val footerClickListener: OnFooterC
     }
 
     private fun hasFooter(): Boolean {
-        return super.getItemCount() != 0 && (status == NetworkResponse.Status.LOADING || status == NetworkResponse.Status.ERROR)
+        return super.getItemCount() != 0 && (status == NetworkResponse.Status.ERROR)
     }
 
     interface OnArticleClicked {

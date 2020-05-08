@@ -95,7 +95,7 @@ dependencies {
 
 
     // Dagger2 core
-    def dagger_version = "2.25.2"
+    def dagger_version = "2.25.4"
     implementation "com.google.dagger:dagger:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
@@ -115,15 +115,9 @@ dependencies {
 
     // Paging //
     def paging_version = "2.1.1"
-
     implementation "androidx.paging:paging-runtime:$paging_version"
-    // For Kotlin use paging-runtime-ktx
-    // alternatively - without Android dependencies for testing
     testImplementation "androidx.paging:paging-common:$paging_version"
-    // For Kotlin use paging-common-ktx
-    // optional - RxJava support
     implementation "androidx.paging:paging-rxjava2:$paging_version"
-    // For Kotlin use paging-rxjava2-ktx
 
     // tab layout //
     implementation 'com.nshmura:recyclertablayout:1.5.0'
@@ -134,5 +128,12 @@ dependencies {
     // viewpager
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
+    // Room components
+    def room_version = "2.2.5"
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    androidTestImplementation "androidx.room:room-testing:$room_version"
+    kapt "android.arch.persistence.room:compiler:$room_version"
 
 }

@@ -57,7 +57,6 @@
                         android:textColor="#7d7c7b" />
                 </androidx.cardview.widget.CardView>
 
-
                 <!--main text view -->
                 <TextView
                     android:id="@+id/detailsTitleTextView"

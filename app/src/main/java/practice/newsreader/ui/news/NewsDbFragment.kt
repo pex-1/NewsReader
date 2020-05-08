@@ -1,6 +1,5 @@
 package practice.newsreader.ui.news
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,7 +20,7 @@ import practice.newsreader.util.*
 import javax.inject.Inject
 
 
-class NewsFragment @Inject constructor() : NewsReaderFragment(), NewsAdapter.OnArticleClicked, NewsAdapter.OnFooterClicked {
+class NewsDbFragment @Inject constructor() : NewsReaderFragment(), NewsAdapter.OnArticleClicked, NewsAdapter.OnFooterClicked {
 
     private var navController: NavController? = null
 
@@ -31,7 +30,7 @@ class NewsFragment @Inject constructor() : NewsReaderFragment(), NewsAdapter.OnA
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
 
-    lateinit var viewModel: NewsViewModel
+    lateinit var viewModel: NewsDbViewModel
 
     private var swipeLoading = false
 
@@ -39,8 +38,8 @@ class NewsFragment @Inject constructor() : NewsReaderFragment(), NewsAdapter.OnA
     companion object {
         val TAB_NUMBER = "tab_number"
 
-        fun newInstance(tabNumber: Int): NewsFragment {
-            val fragment = NewsFragment()
+        fun newInstance(tabNumber: Int): NewsDbFragment {
+            val fragment = NewsDbFragment()
             val bundle = Bundle()
             bundle.putInt(TAB_NUMBER, tabNumber)
             fragment.arguments = bundle
@@ -62,11 +61,9 @@ class NewsFragment @Inject constructor() : NewsReaderFragment(), NewsAdapter.OnA
             EndpointsUtil.position = arguments!!.getInt(TAB_NUMBER)
         }
 
-        viewModel = ViewModelProvider(this, providerFactory).get(NewsViewModel::class.java)
+        viewModel = ViewModelProvider(this, providerFactory).get(NewsDbViewModel::class.java)
 
         subscribeObservers()
-
-        initSwipeRefresh()
 
         initSearch()
 
@@ -74,13 +71,15 @@ class NewsFragment @Inject constructor() : NewsReaderFragment(), NewsAdapter.OnA
 
         val itemDecoration = VerticalSpacingItemDecoration(15)
         newsRecyclerView.addItemDecoration(itemDecoration)
+
+
     }
 
-    private fun resetSearch(){
+    private fun resetSearch() {
         resetSearchImageView.setOnClickListener {
             EndpointsUtil.searchQuery[getPosition()] = null
             searchQueryLinearLayout.hide()
-            viewModel.refresh()
+            viewModel.resetSearch()
         }
     }
 
@@ -88,65 +87,44 @@ class NewsFragment @Inject constructor() : NewsReaderFragment(), NewsAdapter.OnA
         if (query != null) {
             EndpointsUtil.searchQuery[getPosition()] = query
             initSearch()
-            viewModel.refresh()
         }
     }
 
-    private fun initSearch(){
-        if(EndpointsUtil.searchQuery[getPosition()] != null){
+    private fun initSearch() {
+        if (EndpointsUtil.searchQuery[getPosition()] != null) {
             searchQueryLinearLayout.show()
             searchQueryTextView.text = EndpointsUtil.searchQuery[getPosition()]
+            viewModel.searchNews(EndpointsUtil.searchQuery[getPosition()]!!)
         }
+        viewModel.getArticles()
     }
 
     private fun getPosition() = arguments?.getInt(TAB_NUMBER) ?: 0
 
-    private fun hideProgress() {
-        newsLoadingProgressBar.hide()
-        newsSwipeRefreshLayout.isRefreshing = false
-        swipeLoading = false
-    }
-
-    private fun initSwipeRefresh() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            newsSwipeRefreshLayout.setColorSchemeColors(resources.getColor(R.color.main_color, null))
-        }
-        newsSwipeRefreshLayout.setOnRefreshListener {
-            swipeLoading = true
-            viewModel.refresh()
-        }
-    }
-
     private fun subscribeObservers() {
-        viewModel.getArticleList().removeObservers(viewLifecycleOwner)
-        viewModel.getArticleList().observe(viewLifecycleOwner, Observer {
-                    if (it != null) {
-                        setUi(it)
+        viewModel.articleList.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                setUi(it)
+            }
+        })
+        viewModel.response.observe(viewLifecycleOwner, Observer {
+            if(it != null){
+                when(it.status){
+                    NetworkResponse.Status.LOADING -> newsLoadingProgressBar.show()
+                    NetworkResponse.Status.SUCCESS -> newsLoadingProgressBar.hide()
+                    NetworkResponse.Status.ERROR -> {
+                        newsLoadingProgressBar.hide()
+                        view?.snackbar(it.message.toString())
                     }
-                })
-
-        viewModel.getResponse().removeObservers(viewLifecycleOwner)
-        viewModel.getResponse().observe(viewLifecycleOwner, Observer {
-                    if (!viewModel.listIsEmpty()) {
-                        newsAdapter.setStatus(it.status ?: NetworkResponse.Status.SUCCESS)
-                    }
-                    when (it.status) {
-                        NetworkResponse.Status.LOADING -> if (!swipeLoading) newsLoadingProgressBar.show()
-                        NetworkResponse.Status.SUCCESS -> hideProgress()
-
-                        NetworkResponse.Status.ERROR -> {
-                            hideProgress()
-                            view?.snackbar("Error: ${it.message.toString()}")
-                        }
-                    }
-                })
+                }
+            }
+        })
     }
 
     private fun setUi(it: PagedList<Article>) {
         newsRecyclerView.apply {
 
             newsAdapter.submitList(it)
-            viewModel.retry()
             layoutManager = LinearLayoutManager(context)
             adapter = newsAdapter
         }
@@ -159,7 +137,7 @@ class NewsFragment @Inject constructor() : NewsReaderFragment(), NewsAdapter.OnA
     }
 
     override fun onClick() {
-        viewModel.retry()
+
     }
 
 
