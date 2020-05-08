@@ -25,4 +25,5 @@
     </string-array>
     <string name="splash_screen_image">Splash screen image</string>
     <string name="reset_search_icon">reset search icon</string>
+    <string name="add_to_favorites_image">Add to favorites image</string>
 </resources>

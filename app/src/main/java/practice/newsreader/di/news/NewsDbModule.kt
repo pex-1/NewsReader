@@ -14,7 +14,7 @@ import practice.newsreader.ui.news.paging.NewsDataSourceFactory
 import practice.newsreader.ui.news.NewsFragment
 
 @Module
-class NewsModule {
+class NewsDbModule {
 
 
     @NewsScope
@@ -25,45 +25,27 @@ class NewsModule {
 
     @NewsScope
     @Provides
-    fun provideOnFooterClickListener(newsFragment: NewsFragment): NewsAdapter.OnFooterClicked {
+    fun provideOnFooterClickListener(newsFragment: NewsDbFragment): NewsAdapter.OnFooterClicked {
         return newsFragment
     }
 
     @NewsScope
     @Provides
-    fun provideOnArticleClickListener(newsFragment: NewsFragment): NewsAdapter.OnArticleClicked {
+    fun provideOnArticleClickListener(newsFragment: NewsDbFragment): NewsAdapter.OnArticleClicked {
         return newsFragment
     }
 
-
     @NewsScope
     @Provides
-    fun provideGlide(newsFragment: NewsFragment): RequestManager {
+    fun provideGlide(newsFragment: NewsDbFragment): RequestManager {
         return Glide.with(newsFragment)
     }
 
-
-
-    @Provides
-    fun provideNewsDataSource(apiService: ApiService, compositeDisposable: CompositeDisposable): NewsDataSource {
-        return NewsDataSource(apiService, compositeDisposable)
-    }
-
-    @Provides
-    fun provideNewsDataSourceFactory(apiService: ApiService, compositeDisposable: CompositeDisposable): NewsDataSourceFactory {
-        return NewsDataSourceFactory(apiService, compositeDisposable)
-    }
 
     @NewsScope
     @Provides
     fun provideCompositeDisposable(): CompositeDisposable {
         return CompositeDisposable()
-    }
-
-    @NewsScope
-    @Provides
-    fun provideCompletable(): Completable? {
-        return Completable.complete()
     }
 
 

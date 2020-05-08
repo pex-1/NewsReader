@@ -3,7 +3,6 @@ package practice.newsreader.ui.news
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -14,9 +13,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_pager.*
 import practice.newsreader.R
-import practice.newsreader.util.Constants
 import practice.newsreader.util.EndpointsUtil
-import practice.newsreader.util.toast
 import javax.inject.Inject
 
 
@@ -57,9 +54,8 @@ class PagerFragment : DaggerFragment() {
     private fun initViewPager() {
         viewPager.adapter = adapter
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            if (position == 3) tab.icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_star_black_24dp)
-            else tab.text = context?.resources?.getStringArray(R.array.fragment_titles)
-                    ?.get(position)
+            if (position == 3) tab.icon = ContextCompat.getDrawable(requireActivity(), R.drawable.ic_star_red)
+            else tab.text = context?.resources?.getStringArray(R.array.fragment_titles)?.get(position)
         }.attach()
     }
 
@@ -87,7 +83,7 @@ class PagerFragment : DaggerFragment() {
                 adapter.getItem(selectedTab)
                         ?.apply {
                             setSearchQuery(query)
-                            viewModel.refresh()
+                            //viewModel.refresh()
                         }
                 return true
             }
